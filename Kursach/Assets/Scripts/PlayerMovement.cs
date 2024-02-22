@@ -9,7 +9,12 @@ public class PlayerMovement : MonoBehaviour
     private float moveSpeed = 8f;
     private float gravityScale = 1;
     private float fallGravityScale = 3;
-    
+    private float wallJumpingDirection;
+    private float wallJumpingTime = 0.2f;
+    private float wallJumpingCounter;
+    private float wallJumpingDuration = 0.4f;
+    private Vector2 wallJumpingPower = new Vector2(10f, 20f);
+
     private bool isFacingRight = true;
 
     private bool canDash = true;
@@ -20,11 +25,16 @@ public class PlayerMovement : MonoBehaviour
     private bool isJumpPressed;
     private bool isShiftPressed;
     private bool isGrounded;
+    private bool isWallJumping;
+    private bool onWall;
+    private bool isWallSliding;
+
+
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private new string tag;
     [SerializeField] private TrailRenderer tr;
-    [SerializeField] private float jumpHeight = 8f;
+    [SerializeField] private float jumpPower = 16f;
 
 
     // Update is called once per frame
@@ -36,6 +46,18 @@ public class PlayerMovement : MonoBehaviour
         isShiftPressed = isShiftPressed || Input.GetKeyDown(KeyCode.LeftShift);
 
         Flip();
+        WallSlide();
+        WallJump();
+
+        if (!isWallJumping)
+        {
+            Flip();
+        }
+        if (Input.GetButtonDown("Jump"))
+        {
+            Debug.Log("onWall: " +onWall);
+            Debug.Log("isGrounded " +isGrounded);
+        }
     }
     private void FixedUpdate()
     {
@@ -43,23 +65,23 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        if (!isWallJumping)
+            rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
         if (isJumpPressed && isGrounded)
         {
             rb.gravityScale = gravityScale;
-            float jumpForce = Mathf.Sqrt(jumpHeight * (Physics2D.gravity.y * rb.gravityScale) * -2) * rb.mass;
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
 
-        if (isShiftPressed && canDash )
+        if (isShiftPressed && canDash)
         {
             StartCoroutine(Dash());
         }
         isJumpPressed = false;
         isShiftPressed = false;
 
-        if(rb.velocity.y > 0)
+        if (rb.velocity.y > 0)
         {
             rb.gravityScale = gravityScale;
         }
@@ -75,12 +97,21 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = true;
         }
+
+        if (collision.collider.gameObject.CompareTag("Wall"))
+        {
+            onWall = true;
+        }
     }
-   void OnCollisionExit2D(Collision2D collision)
+    void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
+        }
+        if (collision.collider.gameObject.CompareTag("Wall"))
+        {
+            onWall = false;
         }
     }
     private void Flip()
@@ -92,6 +123,56 @@ public class PlayerMovement : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+    }
+    private void WallSlide()
+    {
+        if (onWall && !isGrounded && horizontal != 0f)
+        {
+            isWallSliding = true;
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -2f, float.MaxValue));
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+    }
+
+    private void WallJump()
+    {
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpingDirection = -transform.localScale.x;
+            wallJumpingCounter = wallJumpingTime;
+
+            CancelInvoke(nameof(StopWallJumping));
+        }
+        else
+        {
+            wallJumpingCounter -= Time.deltaTime;
+        }
+
+        if (isJumpPressed && wallJumpingCounter > 0f)
+        {
+            isWallJumping = true;
+            rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+            wallJumpingCounter = 0f;
+
+            if (transform.localScale.x != wallJumpingDirection)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
+
+            Invoke(nameof(StopWallJumping), wallJumpingDuration);
+        }
+    }
+
+    private void StopWallJumping()
+    {
+        isWallJumping = false;
     }
 
     private IEnumerator Dash()
