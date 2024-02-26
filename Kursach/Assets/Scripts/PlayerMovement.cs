@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 wallJumpingPower = new Vector2(10f, 20f);
 
     private bool isFacingRight = true;
-
     private bool canDash = true;
     private bool isDashing;
     private float dashingPower = 24f;
@@ -24,13 +23,15 @@ public class PlayerMovement : MonoBehaviour
     private float dashingCooldown = 1f;
     private bool isJumpPressed;
     private bool isShiftPressed;
+    private bool isDownPressed;
     private bool isGrounded;
     private bool isWallJumping;
     private bool onWall;
     private bool isWallSliding;
 
+    private GameObject currentOneWayPlatform;
 
-
+    [SerializeField] private BoxCollider2D playerCollider;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private new string tag;
     [SerializeField] private TrailRenderer tr;
@@ -44,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
         isJumpPressed = isJumpPressed || Input.GetButtonDown("Jump");
         isShiftPressed = isShiftPressed || Input.GetKeyDown(KeyCode.LeftShift);
+        isDownPressed = isDownPressed || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
 
         Flip();
         WallSlide();
@@ -52,11 +54,6 @@ public class PlayerMovement : MonoBehaviour
         if (!isWallJumping)
         {
             Flip();
-        }
-        if (Input.GetButtonDown("Jump"))
-        {
-            Debug.Log("onWall: " +onWall);
-            Debug.Log("isGrounded " +isGrounded);
         }
     }
     private void FixedUpdate()
@@ -74,12 +71,21 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
 
+        if(isDownPressed)
+        {
+            if(currentOneWayPlatform != null)
+            {
+                StartCoroutine(DisableCollision());
+            }
+        }
+
         if (isShiftPressed && canDash)
         {
             StartCoroutine(Dash());
         }
         isJumpPressed = false;
         isShiftPressed = false;
+        isDownPressed = false;
 
         if (rb.velocity.y > 0)
         {
@@ -93,11 +99,14 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.gameObject.CompareTag("Ground"))
+        if (collision.collider.gameObject.CompareTag("Ground") || collision.collider.gameObject.CompareTag("Platform"))
         {
             isGrounded = true;
         }
-
+        if (collision.collider.gameObject.CompareTag("Platform"))
+        {
+            currentOneWayPlatform = collision.gameObject;
+        }
         if (collision.collider.gameObject.CompareTag("Wall"))
         {
             onWall = true;
@@ -105,9 +114,13 @@ public class PlayerMovement : MonoBehaviour
     }
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.gameObject.CompareTag("Ground"))
+        if (collision.collider.gameObject.CompareTag("Ground") || collision.collider.gameObject.CompareTag("Platform"))
         {
             isGrounded = false;
+        }
+        if (collision.collider.gameObject.CompareTag("Platform"))
+        {
+            currentOneWayPlatform = null;
         }
         if (collision.collider.gameObject.CompareTag("Wall"))
         {
@@ -175,6 +188,14 @@ public class PlayerMovement : MonoBehaviour
         isWallJumping = false;
     }
 
+    private IEnumerator DisableCollision()
+    {
+        BoxCollider2D platformCollider = currentOneWayPlatform.GetComponent<BoxCollider2D>();
+
+        Physics2D.IgnoreCollision(playerCollider, platformCollider);
+        yield return new WaitForSeconds(0.25f);
+        Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
+    }
     private IEnumerator Dash()
     {
         canDash = false;

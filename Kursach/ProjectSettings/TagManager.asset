@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Ground
   - Wall
+  - Platform
+  - SpawnPoint
+  - Room
+  - Rooms
   layers:
   - Default
   - TransparentFX
