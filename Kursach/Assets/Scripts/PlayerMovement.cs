@@ -83,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(Dash());
         }
-        isJumpPressed = false;
+        isJumpPressed = false; 
         isShiftPressed = false;
         isDownPressed = false;
 
