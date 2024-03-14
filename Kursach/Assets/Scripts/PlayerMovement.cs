@@ -150,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void WallJump()
+    private void WallJump() 
     {
         if (isWallSliding)
         {
