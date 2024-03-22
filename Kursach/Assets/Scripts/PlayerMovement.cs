@@ -11,13 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private float fallGravityScale = 3;
 
     private bool isFacingRight = true;
-    private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 24f;
-    private float dashingTime = 0.2f;
-    private float dashingCooldown = 1f;
     private bool isJumpPressed;
-    private bool isShiftPressed;
     private bool isDownPressed;
 
     private GameObject currentOneWayPlatform;
@@ -26,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private new string tag;
     [SerializeField] private TrailRenderer tr;
+    [SerializeField] private Animator animator;
     [SerializeField] private float jumpPower = 16f;
 
     public Vector2 boxSize;
@@ -37,8 +33,9 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
+        animator.SetFloat("Speed", Mathf.Abs(horizontal));
+
         isJumpPressed = isJumpPressed || Input.GetButtonDown("Jump");
-        isShiftPressed = isShiftPressed || Input.GetKeyDown(KeyCode.LeftShift);
         isDownPressed = isDownPressed || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
 
         Flip();
@@ -46,24 +43,28 @@ public class PlayerMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (isDashing)
-        {
-            return;
-        }
             rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
         if (isJumpPressed && isGrounded())
         {
             rb.gravityScale = gravityScale;
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            animator.SetBool("IsJumping", true);
+        }
+        else if (!isJumpPressed && isGrounded())
+        {
+            animator.SetBool("IsJumping", false);
         }
 
-        if (isShiftPressed && canDash)
+        if(isDownPressed)
         {
-            StartCoroutine(Dash());
+            if (currentOneWayPlatform != null)
+            {
+                StartCoroutine(DisableCollision());
+            }
         }
+
         isJumpPressed = false; 
-        isShiftPressed = false;
         isDownPressed = false;
 
         if (rb.velocity.y > 0)
@@ -103,20 +104,26 @@ public class PlayerMovement : MonoBehaviour
     {
         Gizmos.DrawWireCube(transform.position-transform.up*castDistance, boxSize);
     }
-
-    private IEnumerator Dash()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        canDash = false;
-        isDashing = true;
-        float originalGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
-        tr.emitting = true;
-        yield return new WaitForSeconds(dashingTime);
-        tr.emitting = false;
-        rb.gravityScale = originalGravity;
-        isDashing = false;
-        yield return new WaitForSeconds(dashingCooldown);
-        canDash = true;
+        if(collision.gameObject.CompareTag("Platform"))
+        {
+            currentOneWayPlatform = collision.gameObject;
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Platform"))
+        {
+            currentOneWayPlatform = null;
+        }
+    }
+    private IEnumerator DisableCollision()
+    {
+        BoxCollider2D platformCollider = currentOneWayPlatform.GetComponent<BoxCollider2D>();
+
+        Physics2D.IgnoreCollision(playerCollider, platformCollider);
+        yield return new WaitForSeconds(0.25f);
+        Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
     }
 }
