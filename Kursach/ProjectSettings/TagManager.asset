@@ -10,6 +10,7 @@ TagManager:
   - SpawnPoint
   - Room
   - Rooms
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -20,9 +21,9 @@ TagManager:
   - Ground
   - Wall
   - Door
-  - 
-  - 
-  - 
+  - Damageable
+  - Dead
+  - Player
   - 
   - 
   - 
@@ -46,4 +47,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1197761637
+    locked: 0
+  - name: Solid
+    uniqueID: 752330917
+    locked: 0
+  - name: Decoration
+    uniqueID: 1867358973
+    locked: 0
+  - name: Enemy
+    uniqueID: 2426066631
+    locked: 0
+  - name: Player
+    uniqueID: 3952470727
     locked: 0
