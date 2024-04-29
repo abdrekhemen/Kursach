@@ -10,6 +10,7 @@ public class CameraFollow : MonoBehaviour
 
     private Transform target;
 
+
     private void Start()
     {
         target = GameObject.Find("Player").transform;
@@ -20,5 +21,10 @@ public class CameraFollow : MonoBehaviour
     {
         Vector3 targetPosition = target.position + offset;
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+    }
+
+    public void PlayerFocus()
+    {
+        target = GameObject.Find("Player").transform;
     }
 }

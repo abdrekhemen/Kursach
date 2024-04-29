@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
@@ -34,6 +35,8 @@ public class PlayerController : MonoBehaviour
     private bool isDashing;
     private bool knockback;
 
+    [SerializeField] private Vector2 knockbackSpeed;
+
     private Rigidbody2D rb;
     private Animator anim;
 
@@ -55,7 +58,6 @@ public class PlayerController : MonoBehaviour
     public float dashTime;
     public float dashSpeed;
     public float dashCooldown;
-    public float aasd;
 
     public Vector2 wallHopDirection;
     public Vector2 wallJumpDirection;
@@ -86,6 +88,7 @@ public class PlayerController : MonoBehaviour
         CheckIfWallSliding();
         CheckJump();
         CheckDash();
+        CheckKnockback();
     }
 
     private void FixedUpdate()
@@ -106,6 +109,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool GetDashStatus()
+    {
+        return isDashing;
+    }
+
+    public void Knockback(int direction)
+    {
+        knockback = true;
+        knockbackStartTime = Time.time;
+        rb.velocity = new Vector2(knockbackSpeed.x * direction, knockbackSpeed.y);
+    }
+
+    private void CheckKnockback()
+    {
+        if(Time.time >= knockbackStartTime + knockbackDuration && knockback)
+        {
+            knockback = false;
+            rb.velocity = new Vector2(0.0f, rb.velocity.y);
+        }
+    }
     private void CheckSurroundings()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
@@ -328,11 +351,11 @@ public class PlayerController : MonoBehaviour
     private void ApplyMovement()
     {
 
-        if (!isGrounded && !isWallSliding && movementInputDirection == 0)
+        if (!isGrounded && !isWallSliding && movementInputDirection == 0 && !knockback)
         {
             rb.velocity = new Vector2(rb.velocity.x * airDragMultiplier, rb.velocity.y);
         }
-        else if(canMove)
+        else if(canMove && !knockback)
         {
             rb.velocity = new Vector2(movementSpeed * movementInputDirection, rb.velocity.y);
         }
@@ -358,7 +381,7 @@ public class PlayerController : MonoBehaviour
 
     private void Flip()
     {
-        if(!isWallSliding && canFlip)
+        if(!isWallSliding && canFlip && !knockback)
         {
             facingDirection *= -1; 
             isFacingRight = !isFacingRight;
@@ -371,5 +394,6 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
 
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y, wallCheck.position.z));
+
     }
 }
