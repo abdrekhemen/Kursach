@@ -1,33 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField] private BoxCollider2D doorCollider;
-    [SerializeField] private SpriteRenderer doorRenderer;
     [SerializeField] private bool inside;
+    public bool isKeyPicked;
 
+    private GameObject player;
+
+    private void Start()
+    {
+        player = GameObject.Find("Player");
+    }
     private void Update()
     {
-       if (inside && Input.GetKeyUp(KeyCode.E) && doorCollider.enabled==true)
+        if (inside && Input.GetKeyUp(KeyCode.E) && isKeyPicked)
         {
-            doorCollider.enabled = false;
-            doorRenderer.color = Color.blue;
-        }
-       else if(inside && Input.GetKeyUp(KeyCode.E) && doorCollider.enabled==false)
-        {
-            doorCollider.enabled = true;
-            doorRenderer.color = Color.red;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
     }
-    void OnTriggerStay2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        inside = true;
+        if (other.gameObject == player)
+        {
+            inside = true;
+        }
     }
     void OnTriggerExit2D(Collider2D other)
     {
-        inside = false;
+        if(other.gameObject==player)
+        {
+            inside = false;
+        }  
     }
 }
