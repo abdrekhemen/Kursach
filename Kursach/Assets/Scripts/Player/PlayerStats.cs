@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         //TODO:Animation for death.
-        GM.Respawn();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Destroy(gameObject);
     }
 }
