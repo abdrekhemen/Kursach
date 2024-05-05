@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: E1_BaseData
   m_EditorClassIdentifier: 
   maxHealth: 50
-  damageHopSpeed: 10
+  damageHopSpeed: 3
   wallCheckDistance: 0.2
   ledgeCheckDistance: 1
   groundCheckRadius: 0.3
