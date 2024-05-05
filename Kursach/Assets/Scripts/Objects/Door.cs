@@ -7,16 +7,31 @@ public class Door : MonoBehaviour
 {
     [SerializeField] private bool inside;
     public bool isKeyPicked;
+    public bool isKeyOnLevel;
 
     private GameObject player;
+    private GameObject key;
 
     private void Start()
     {
         player = GameObject.Find("Player");
+        key = GameObject.Find("Key");
+        if(key != null) 
+        {
+            isKeyOnLevel = true;
+        }
+        else
+        {
+            isKeyOnLevel = false;
+        }
     }
     private void Update()
     {
-        if (inside && Input.GetKeyUp(KeyCode.E) && isKeyPicked)
+        if (inside && Input.GetKeyUp(KeyCode.E) && !isKeyOnLevel)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        else if(inside && Input.GetKeyUp(KeyCode.E) && isKeyOnLevel && isKeyPicked)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }

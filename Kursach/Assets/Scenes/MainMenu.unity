@@ -205,7 +205,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 36794299}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 409131003}
+        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
+        m_MethodName: Register
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &36794299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,6 +580,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 389681202}
   m_CullTransparentMesh: 1
+--- !u!1 &409131002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 409131004}
+  - component: {fileID: 409131003}
+  m_Layer: 0
+  m_Name: AuthManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &409131003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409131002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bf77afc78cf7c43850b985890159ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LoginInput: {fileID: 1221996971}
+  PasswordInput: {fileID: 1186609065}
+  LoginWindow: {fileID: 1584560887}
+  MainMenu: {fileID: 837451427}
+--- !u!4 &409131004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409131002}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 484.40414, y: 268.68097, z: -2.5288785}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &491471700
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +711,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 921895172}
+      - m_Target: {fileID: 921895175}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: Play
         m_Mode: 1
@@ -1158,7 +1218,7 @@ GameObject:
   - component: {fileID: 921895171}
   - component: {fileID: 921895174}
   - component: {fileID: 921895173}
-  - component: {fileID: 921895172}
+  - component: {fileID: 921895175}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -1187,18 +1247,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 119}
   m_SizeDelta: {x: 298.993, y: 107.80969}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &921895172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921895170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f9f193db70f8143ada34281bb012e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &921895173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1233,6 +1281,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 921895170}
   m_CullTransparentMesh: 1
+--- !u!114 &921895175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921895170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f9f193db70f8143ada34281bb012e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &939076770
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,7 +1688,7 @@ GameObject:
   - component: {fileID: 1186609066}
   - component: {fileID: 1186609065}
   m_Layer: 5
-  m_Name: LoginInput
+  m_Name: PasswordInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1702,8 +1762,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -2234,7 +2294,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 921895172}
+      - m_Target: {fileID: 921895175}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: Quit
         m_Mode: 1
@@ -2521,7 +2581,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1548024971}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 409131003}
+        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
+        m_MethodName: Enter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1548024971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2849,7 +2921,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1221996969}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &2019192946
@@ -3274,3 +3346,4 @@ SceneRoots:
   - {fileID: 837451431}
   - {fileID: 1584560891}
   - {fileID: 2068011599}
+  - {fileID: 409131004}

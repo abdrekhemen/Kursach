@@ -94,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 6444306865907854770}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.31, y: -3.045, z: 0}
+  m_LocalPosition: {x: -10.3350525, y: -3.0143833, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -263,7 +263,7 @@ MonoBehaviour:
   knockbackDuration: 0.1
   knockbackSpeed: {x: 10, y: 5}
   amountOfJumps: 1
-  movementSpeed: 5
+  movementSpeed: 6
   jumpForce: 20
   groundCheckRadius: 0.39
   wallCheckDistance: 0.65
@@ -322,6 +322,7 @@ MonoBehaviour:
   maxHealth: 50
   deathChunkParticle: {fileID: 0}
   deathBloodParticle: {fileID: 0}
+  healthBar: {fileID: 0}
 --- !u!1 &6562182912073465395
 GameObject:
   m_ObjectHideFlags: 0
