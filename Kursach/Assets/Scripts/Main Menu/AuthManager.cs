@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,11 +14,7 @@ public class AuthManager : MonoBehaviour
 
     private bool isSearchInProgress;
 
-    private void Awake()
-    {
-        Process.Start(@"C:\Program Files\MongoDB\Server\6.0\bin\mongod.exe");
-    }
-        
+
     public async void Enter()
     {
         if (!isSearchInProgress)
