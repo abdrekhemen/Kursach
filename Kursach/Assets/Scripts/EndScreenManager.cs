@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndScreenManager : MonoBehaviour
 {
@@ -34,6 +35,14 @@ public class EndScreenManager : MonoBehaviour
         ShowSaves();
     }
 
+    private void Update()
+    {
+        if (Input.GetButtonDown("Restart"))
+        {
+            SceneManager.LoadScene("Level 1");
+            TimeManager.timer = 0;
+        }
+    }
     public void ShowSaves()
     {
         if (records == null)

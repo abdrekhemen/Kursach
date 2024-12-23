@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -238,6 +239,11 @@ public class PlayerController : MonoBehaviour
                 AttemptToDash();
             }
             
+        }
+        if (Input.GetButtonDown("Restart"))
+        {
+            SceneManager.LoadScene("Level 1");
+            TimeManager.timer = 0;
         }
     }
 
